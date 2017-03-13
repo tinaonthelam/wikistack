@@ -24,10 +24,19 @@ var Page = db.define('page', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     }
-
 }, {
     getterMethod : {
         urlRoute : function() { return '/wiki/' + this.getDataValue('urlTitle'); }
+    },
+    hooks: {
+      beforeValidate: function (page) {
+        if (page) {
+          page.dataValues.urlTitle = page.dataValues.title.replace(/\s+/g, '_').replace(/\W/g, '');
+          console.log(page.urlTitle)
+        } else {
+          return Math.random().toString(36).substring(2, 7);
+        }
+      }
     }
 });
 
