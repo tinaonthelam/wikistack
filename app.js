@@ -2,9 +2,18 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 var chalk = require('chalk');
-var models = require('./models');
-const app = require('express')();
+var models = require('./models/index.js');
+const express = require('express');
+const app = express();
 const env = nunjucks.configure('views', {noCache: true});
+const routes = require('./routes/wiki');
+
+app.use(bodyParser.urlencoded({ extended: true })); // for HTML form submits
+app.use(bodyParser.json()); // would be for AJAX requests
+
+
+app.use('/wiki', routes);
+
 
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
