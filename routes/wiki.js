@@ -17,18 +17,53 @@ router.get('/', function(req, res, next) {
 
 });
 
+router.get('/users', function(req, res, next) {
+	User.findAll({
+		attributes: ['name']
+	})
+	.then(function(foundUser) {
+		res.render('../views/users', {users: foundUser})
+	})
+	.catch(next);
+})
+
+router.get('/users/:id', function(req, res, next) {
+	User.findOne({
+		attributes: ['name']
+	})
+	.then(function(foundUser) {
+		res.render('../views/users', {users: foundUser})
+	})
+	.catch(next);
+})
+
 router.post('/', function(req, res, next) {
 
-	var page = Page.build({
-		title: req.body.title,
-		content: req.body.content
- 	});
+ 	User.findOrCreate({
+ 		where: {
+ 			name : req.body.user,
+ 			email : req.body.email
+ 		}
+ 	})
+ 	.then(function(users){
+ 		console.log(users[0])
+ 		var user = users[0];
 
-	page.save()
+ 		var page = Page.build({
+			title: req.body.title,
+			content: req.body.content
+	 	});
+
+	 	return page.save().then(function(page) {
+	 		return page.setAuthor(user);
+	 	});
+
+ 	})
+	
 	.then(function(done) {
-		var urlTitle = page.dataValues.urlTitle;
-		res.redirect('/wiki/' + urlTitle);
-	}).catch(next);
+		res.redirect(page.route);
+	})
+	.catch(next);
 
 });
 

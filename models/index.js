@@ -26,7 +26,7 @@ var Page = db.define('page', {
     }
 }, {
     getterMethod : {
-        urlRoute : function() { return '/wiki/' + this.getDataValue('urlTitle'); }
+        route : function() { return '/wiki/' + this.urlTitle; }
     },
     hooks: {
       beforeValidate: function (page) {
@@ -50,6 +50,8 @@ var User = db.define('user', {
         allowNull: false
     }
 });
+
+Page.belongsTo(User, {as: 'author'});
 
 module.exports = {
   Page: Page,

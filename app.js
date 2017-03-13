@@ -8,12 +8,14 @@ var path = require('path');
 const app = express();
 const env = nunjucks.configure('views', {noCache: true});
 const routes = require('./routes/wiki');
+const users = require('./routes/users');
 
 app.use(bodyParser.urlencoded({ extended: true })); // for HTML form submits
 app.use(bodyParser.json()); // would be for AJAX requests
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/wiki', routes);
+app.use('/users', users);
 
 
 app.set('view engine', 'html');
@@ -21,7 +23,7 @@ app.engine('html', nunjucks.render);
 
 models.User.sync({})
 .then(function () {
-    return models.Page.sync({})
+    return models.Page.sync({force : true})
 })
 .then(function () {
     app.listen(3000, function () {
