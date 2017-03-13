@@ -6,8 +6,6 @@ var models = require('./models');
 const app = require('express')();
 const env = nunjucks.configure('views', {noCache: true});
 
-
-
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
