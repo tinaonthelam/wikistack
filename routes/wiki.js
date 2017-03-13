@@ -16,11 +16,10 @@ router.post('/', function(req, res, next) {
 	 content: req.body.content
  });
 
-	console.log(page);
 	page.save()
 	.then(function(done) {
-		console.log(done);
-		res.redirect('/');
+		var urlTitle = page.dataValues.urlTitle;
+		res.redirect('/' + urlTitle);
 	})
 	.catch(function(err) {
 		throw(err);
@@ -30,6 +29,18 @@ router.post('/', function(req, res, next) {
 
 router.get('/add', function(req, res, next) {
 	res.render('../views/addpage')
+});
+
+router.get('/:urlTitle', function (req, res, next) {
+  Page.findOne({
+		where: {
+			urlTitle: req.params.urlTitle
+		}
+	})
+	.then(function(foundPage) {
+		res.render('../views/wikipage', {page: foundPage})
+	})
+	.catch(next);
 });
 
 
