@@ -50,8 +50,10 @@ router.post('/', function(req, res, next) {
 
  		var page = Page.build({
 			title: req.body.title,
-			content: req.body.content
+			content: req.body.content,
+			tags: req.body.tags.split(' ')
 	 	});
+	//  console.log('this are tags', req.body.tags.split(' '));
 
 	 	return page.save().then(function(page) {
 	 		return page.setAuthor(user);
@@ -82,7 +84,8 @@ router.get('/:urlTitle', function (req, res, next) {
 		if (foundPage === null) {
 		  res.status(404).send();
 		} else {
-			res.render('../views/wikipage', { page: foundPage });
+			console.log('tags', foundPage.tags.join(' '))
+			res.render('../views/wikipage', { page: foundPage , tags: foundPage.tags.join(' ')});
 		}
 	})
 	.catch(next);
