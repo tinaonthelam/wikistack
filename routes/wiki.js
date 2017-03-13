@@ -6,24 +6,30 @@ var Page = models.Page;
 var User = models.User;
 
 router.get('/', function(req, res, next) {
-	res.redirect('/')
+	// res.redirect('/')
+	Page.findAll({
+		attributes: ['urlTitle', 'title']
+	})
+	.then(function(foundPage) {
+		res.render('../views/index', {pages: foundPage})
+	})
+	.catch(next);
+
 });
 
 router.post('/', function(req, res, next) {
 
 	var page = Page.build({
-	 title: req.body.title,
-	 content: req.body.content
- });
+		title: req.body.title,
+		content: req.body.content
+ 	});
 
 	page.save()
 	.then(function(done) {
 		var urlTitle = page.dataValues.urlTitle;
 		res.redirect('/wiki/' + urlTitle);
-	})
-	.catch(function(err) {
-		throw(err);
-	})
+	}).catch(next);
+
 });
 
 

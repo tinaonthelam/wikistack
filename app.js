@@ -4,6 +4,7 @@ var nunjucks = require('nunjucks');
 var chalk = require('chalk');
 var models = require('./models/index.js');
 const express = require('express');
+var path = require('path');
 const app = express();
 const env = nunjucks.configure('views', {noCache: true});
 const routes = require('./routes/wiki');
@@ -11,7 +12,7 @@ const routes = require('./routes/wiki');
 app.use(bodyParser.urlencoded({ extended: true })); // for HTML form submits
 app.use(bodyParser.json()); // would be for AJAX requests
 
-
+app.use(express.static(path.join(__dirname, '/public')));
 app.use('/wiki', routes);
 
 
