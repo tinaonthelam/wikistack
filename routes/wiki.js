@@ -19,7 +19,7 @@ router.post('/', function(req, res, next) {
 	page.save()
 	.then(function(done) {
 		var urlTitle = page.dataValues.urlTitle;
-		res.redirect('/' + urlTitle);
+		res.redirect('/wiki/' + urlTitle);
 	})
 	.catch(function(err) {
 		throw(err);

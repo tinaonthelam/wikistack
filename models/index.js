@@ -32,7 +32,6 @@ var Page = db.define('page', {
       beforeValidate: function (page) {
         if (page) {
           page.dataValues.urlTitle = page.dataValues.title.replace(/\s+/g, '_').replace(/\W/g, '');
-          console.log(page.urlTitle)
         } else {
           return Math.random().toString(36).substring(2, 7);
         }
