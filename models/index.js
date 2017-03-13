@@ -25,13 +25,13 @@ var Page = db.define('page', {
         defaultValue: Sequelize.NOW
     }
 }, {
-    getterMethod : {
+    getterMethods : {
         route : function() { return '/wiki/' + this.urlTitle; }
     },
     hooks: {
       beforeValidate: function (page) {
         if (page) {
-          page.dataValues.urlTitle = page.dataValues.title.replace(/\s+/g, '_').replace(/\W/g, '');
+          page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '');
         } else {
           return Math.random().toString(36).substring(2, 7);
         }

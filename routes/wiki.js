@@ -46,7 +46,6 @@ router.post('/', function(req, res, next) {
  		}
  	})
  	.then(function(users){
- 		console.log(users[0])
  		var user = users[0];
 
  		var page = Page.build({
@@ -57,10 +56,8 @@ router.post('/', function(req, res, next) {
 	 	return page.save().then(function(page) {
 	 		return page.setAuthor(user);
 	 	});
-
  	})
-	
-	.then(function(done) {
+	.then(function(page) {
 		res.redirect(page.route);
 	})
 	.catch(next);
@@ -76,10 +73,17 @@ router.get('/:urlTitle', function (req, res, next) {
   Page.findOne({
 		where: {
 			urlTitle: req.params.urlTitle
-		}
+		},
+		include: [
+		  {model: User, as: 'author'}
+    ]
 	})
 	.then(function(foundPage) {
-		res.render('../views/wikipage', {page: foundPage})
+		if (foundPage === null) {
+		  res.status(404).send();
+		} else {
+			res.render('../views/wikipage', { page: foundPage });
+		}
 	})
 	.catch(next);
 });

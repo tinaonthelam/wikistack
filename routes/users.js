@@ -18,19 +18,16 @@ router.get('/', function(req, res, next) {
 	.catch(next);
 })
 
-
 router.get('/:id', function(req, res, next) {
-	User.findOne({
-		attributes: ['id']
-	})
-	.then(function(id) {
-		Page.findAll({
-			where: {authorId : id}	
-		})
-		
+	Page.findAll({
+			where: {authorId : req.params.id},
+			include: [
+			  {model: User, as: 'author'}
+	    ]
 	})
 	.then(function(pages){
-		res.render('', {user})
+		// console.log(pages[0].author);
+		res.render('userLinks', {pages: pages, author: pages[0]})
 	})
 	.catch(next);
 })
